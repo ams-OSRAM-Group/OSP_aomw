@@ -37,12 +37,19 @@ The demo runs on the OSP32 board, no demo board needs to be attached, but
 a terminator in OUT or a loop back cable from OUT to IN is needed.
 In Arduino select board "ESP32S3 Dev Module".
 
+BEHAVIOR
+The first RGB (L1.0) of SAID OUT blinks magenta and yellow,
+while printing this to Serial.
+
 OUTPUT
 Welcome to aomw_min.ino
-version: result 0.3.0 spi 0.4.2 osp 0.3.1 mw 0.3.0
+version: result 0.4.1 spi 0.5.1 osp 0.4.1 mw 0.4.0
 spi: init
 osp: init
 mw: init
+
+magenta (ok)
+yellow (ok)
 
 magenta (ok)
 yellow (ok)

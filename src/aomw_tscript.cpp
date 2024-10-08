@@ -34,9 +34,11 @@ flag set, but in the second (white) and the third (blue) do have that flag
 set, the three instructions together make one frame drawing the Red/White/Blue 
 flag on triplets 1 to 9.
 
-There is one complication, a script runs on a chain of any length (any number
-of triplets). Therefore the start and end index of the region in the 
-instruction need to be _mapped_ to physical triplets. 
+A script runs on a chain of any length (any number of triplets). Triplets 
+are not address individually, but the chain is partitioned in regions. 
+Instructions set the color of a region as a whole. For this instructions 
+contain a start-of-region and an end-of-region index. These start and end 
+index need to be _mapped_ to physical triplets (depending on chain length). 
 
 A script needs to be stored in a 256 bytes EEPROM, so everything about this
 script is "tiny". Each instruction is 16 bit, and the red, green, and blue 

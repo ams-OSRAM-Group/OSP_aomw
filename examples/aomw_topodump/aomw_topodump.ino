@@ -36,24 +36,27 @@ The demo runs on the OSP32 board, no demo board needs to be attached, but
 the output shown below is when the SAIDbasic board is connected.
 In Arduino select board "ESP32S3 Dev Module".
 
+BEHAVIOR
+Only scans the change, does not activate LEDs.
+
 OUTPUT
 Welcome to aomw_topodump.ino
-version: result 0.1.7 spi 0.2.4 osp 0.1.12 mw 0.0.5
+version: result 0.4.1 spi 0.5.1 osp 0.4.1 mw 0.4.0
 spi: init
 osp: init
 mw: init
 
-time 5450us commands 42 responses 15
-topo: N(odes) 1..9 T(riplets) 0..18 I(2cbridges) 0..1 Dir loop
-N001 (00000040) T0 T1 T2
-N002 (00000040) T3 T4 T5
-N003 (00000040) T6 T7 T8
-N004 (00000000) T9
-N005 (00000040) T10 T11 [I0]
-N006 (00000000) T12
-N007 (00000000) T13
-N008 (00000000) T14
-N009 (00000040) T15 T16 T17
+time 5502us commands 42 responses 15
+nodes(N) 1..9, triplets(T) 0..16, i2cbridges(I) 0..1, dir loop
+N001 (00000040) T0 T1 I0
+N002 (00000040) T2 T3 T4
+N003 (00000040) T5 T6 T7
+N004 (00000000) T8
+N005 (00000040) T9 T10 I1
+N006 (00000000) T11
+N007 (00000000) T12
+N008 (00000000) T13
+N009 (00000040) T14 T15 T16
 */
 
 

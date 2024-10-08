@@ -72,6 +72,12 @@ aoresult_t aomw_eeprom_present(uint16_t addr, uint8_t daddr7 ) {
             The address of the OSP node (with the I2C bridge).
     @param  daddr7
             The I2C device address of the EEPROM.
+    @param  raddr
+            The address of the register in the EEPROM from where to read).
+    @param  buf
+            The (address of the) buffer to store the read bytes into.
+    @param  count
+            The number of bytes to read (`buf` must have at least this size).
     @return aoresult_ok           if read was successful
             other error code      if there is a (communications) error
     @note   The OSP chain must be initialized (eg with aoosp_exec_resetinit(),
@@ -103,6 +109,12 @@ aoresult_t aomw_eeprom_read(uint16_t addr, uint8_t daddr7, uint8_t raddr, uint8_
             The address of the OSP node (with the I2C bridge).
     @param  daddr7
             The I2C device address of the EEPROM.
+    @param  raddr
+            The address of the register in the EEPROM from where to write).
+    @param  buf
+            The (address of the) buffer containing the bytes to write.
+    @param  count
+            The number of bytes to read (`buf` must have at least this size).
     @return aoresult_ok           if write was successful.
             other error code      if there is a (communications) error
     @note   The OSP chain must be initialized (eg with aoosp_exec_resetinit(),
@@ -151,6 +163,12 @@ aoresult_t aomw_eeprom_write(uint16_t addr, uint8_t daddr7, uint8_t raddr, const
             The address of the OSP node (with the I2C bridge).
     @param  daddr7
             The I2C device address of the EEPROM.
+    @param  raddr
+            The address of the register in the EEPROM from where to read).
+    @param  buf
+            The (address of the) buffer to storing the bytes to compare with.
+    @param  count
+            The number of bytes to read (`buf` must have at least this size).
     @return aoresult_ok           if compare was successful
             aoresult_comparefail  if compare fails (buf differs from EEPROM)
             other error code      if there is a (communications) error

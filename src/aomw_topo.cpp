@@ -42,16 +42,23 @@
 // addresses triplet indices start at 0. An _i2cbridge_ is a node (of type
 // SAID) whose third channel is configured for I2C.
 //
-// An OSP chain needs to be RESET and INITed, then scanned. This is done by
-// calling first aomw_topo_scanstart(), then many times aomw_topo_scanstep(),
-// until aomw_topo_scandone(). There is a shorthand aomw_topo_scan(), but
-// the steps() are better used in combination with a command interpreter,
-// because of the liveliness.
+// An OSP chain needs to be RESET and INITed, then scanned. This is done 
+// by calling first aomw_topo_build_start(), then continuously calling 
+// aomw_topo_build_step(), until aomw_topo_build_done(). There is a 
+// shorthand that performs all these steps, aomw_topo_build(), but
+// the start/step is better in combination with a command interpreter,
+// because of the liveliness/responsiveness.
 //
-// The scan builds a topological map of all triplets, nodes and I2C bridges.
-// Once the scan is completed, it can be printed for debug with aomw_topo_dump(),
-// but in normal applications, the topological map is inspected via the
-// observers aomw_topo_node_xxx(), aomw_topo_triplet_xxx(), aomw_topo_i2cbridge_xxx().
+// The build creates a topological map of all triplets, nodes and I2C bridges.
+// Once the scan is completed, it can be printed for debug with 
+// aomw_topo_dump(), but in normal applications, the topological map is 
+// inspected via the observers aomw_topo_node_xxx(), aomw_topo_triplet_xxx(), 
+// and aomw_topo_i2cbridge_xxx().
+//
+// The aomw_topo_build also configures the chain: clearing error flags,
+// enable crc checking, powering i2C bridges, and last but not least setting 
+// the drive current and going active. This makes all the nodes in the OSP 
+// chain ready for pwm telegrams via aomw_topo_settriplet().
 
 
 #define AOMW_TOPO_MAXNODES       100 // Theoretical max is 1000 (addr space of OSP)
@@ -523,7 +530,7 @@ aoresult_t aomw_topo_build_step() {
       return aoresult_ok;
 
     case AOMW_TOPO_BUILD_STATE_CONFIGCLRERROR:
-      // Broadcast clear error (to clear the under voltage flag of all SAIDs), must have, otherwise SAID will not go ACTIVE
+      // Broadcast clear error (to clear the over voltage flag of all SAIDs), must have, otherwise SAID will not go ACTIVE
       result= aoosp_send_clrerror(0); ON_ERROR_RETURN();
       // prep next state
       aomw_topo_build_state= AOMW_TOPO_BUILD_STATE_CONFIGENABLECRC;
@@ -644,6 +651,9 @@ extern const aomw_topo_rgb_t aomw_topo_off    = { 0x0000,0x0000,0x0000, "off" };
     @note   Each component value (r/g/b) in `rgb` needs to be in the 
             "topo brightness range" from 0 to 0x7FFF 
             (from 0 to AOMW_TOPO_BRIGHTNESS_MAX).
+    @note   SAIDs will be driven at 12mA, and use the 15 bit "topo brightness 
+            range" as PWM value. RGBIs will be driven at night mode (10mA), 
+            and also use the 15 bit "topo brightness range" as PWM value.
     @note   The `rgb` color is dimmed down using the global dim value, 
             set by `aomw_topo_dim_set()`.
 */
@@ -655,11 +665,18 @@ aoresult_t aomw_topo_settriplet( uint16_t tix, const aomw_topo_rgb_t *rgb  ) {
   // Select osp node and channel 
   uint16_t addr = aomw_topo_triplet_addr(tix);
   aoresult_t result;
+  // This is a bit of a shortcut. When the triplet is "on a channel" we
+  // equate that to needing a setpwmchn telegram. In a context of only
+  // two kinds of nodes known at the moment (SAID and RGBI) that is enough.
   if( aomw_topo_triplet_onchan(tix) ) {
-    // The application brightness levels are intended for 10mA drivers; we need to shift in the disable 0 for LSB dithering
+    // Triplet to configure is an external one driven by a SAID. The PWM 
+    // register contains a 15-bit PWM value followed by a 1 bit LSB-dithering
+    // control. Use the 15-bits of "topo brightness range" and no dithering (<<1).
     result= aoosp_send_setpwmchn(addr, aomw_topo_triplet_chan(tix), r << 1, g << 1, b << 1 );
   } else {
-    // The application brightness levels are intended for 10mA drivers, so enable nighttime (10 mA)
+    // Triplet to configure is an RGBI. The PWM register contains a 1-bit drive 
+    // current (0=10mA=nightmode, 1=50mA=daymode) followed by a 15-bit PWM value. 
+    // Use drive current nightmode and the 15-bits of "topo brightness range".
     result= aoosp_send_setpwm( addr, r, g, b, 0b000 );
   }
   return result;

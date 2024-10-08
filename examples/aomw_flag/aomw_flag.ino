@@ -26,20 +26,34 @@
 /*
 DESCRIPTION
 This demo builds a topology map of all nodes of the OSP chain. Next, it 
-uses this topo map to paint flags spread out over an entire OSP chain.
+uses this topo map to paint country flags spread out over an entire OSP chain.
 
 HARDWARE
 The demo runs on the OSP32 board, no demo board needs to be attached, but 
 for better flag rendering connect eg the SAIDbasic board.
 In Arduino select board "ESP32S3 Dev Module".
 
+BEHAVIOR
+Shows 8 country flags in a sequence, then repeats.
+
 OUTPUT
-Nothing flag related, but the OSP chain shows the various flags
 Welcome to aomw_flag.ino
-version: result 0.1.8 spi 0.2.4 osp 0.1.18 mw 0.0.12
+version: result 0.4.1 spi 0.5.1 osp 0.4.1 mw 0.4.0
 spi: init
 osp: init
 mw: init
+
+flag dutch
+flag columbia
+flag japan
+flag mali
+flag italy
+flag europe
+flag usa
+flag china
+
+flag dutch
+flag columbia
 */
 
 
@@ -56,27 +70,37 @@ void setup() {
   aomw_init();
   Serial.printf("\n");
 
+  // Flag painter rely on topo
   aoresult_t result= aomw_topo_build(); PRINT_ERROR();
 }
 
 
 void loop() {
   aoresult_t result;
-  result= aomw_flag_painter_dutch(); PRINT_ERROR();
-  delay(2000);
-  result= aomw_flag_painter_columbia(); PRINT_ERROR();
-  delay(2000);
-  result= aomw_flag_painter_japan(); PRINT_ERROR();
-  delay(2000);
-  result= aomw_flag_painter_mali(); PRINT_ERROR();
-  delay(2000);
-  result= aomw_flag_painter_italy(); PRINT_ERROR();
-  delay(2000);
-  result= aomw_flag_painter_europe(); PRINT_ERROR();
-  delay(2000);
-  result= aomw_flag_painter_usa(); PRINT_ERROR();
-  delay(2000);
-  result= aomw_flag_painter_china(); PRINT_ERROR();
-  delay(2000);
+  #if 0
+    result= aomw_flag_painter_dutch(); PRINT_ERROR();
+    delay(2000);
+    result= aomw_flag_painter_columbia(); PRINT_ERROR();
+    delay(2000);
+    result= aomw_flag_painter_japan(); PRINT_ERROR();
+    delay(2000);
+    result= aomw_flag_painter_mali(); PRINT_ERROR();
+    delay(2000);
+    result= aomw_flag_painter_italy(); PRINT_ERROR();
+    delay(2000);
+    result= aomw_flag_painter_europe(); PRINT_ERROR();
+    delay(2000);
+    result= aomw_flag_painter_usa(); PRINT_ERROR();
+    delay(2000);
+    result= aomw_flag_painter_china(); PRINT_ERROR();
+    delay(2000);
+  #else
+    for( int pix=0; pix<aomw_flag_count(); pix++ ) {
+      Serial.printf("flag %s\n", aomw_flag_name(pix) );
+      result= aomw_flag_painter(pix)(); PRINT_ERROR();
+      delay(2000);
+    }
+    Serial.printf("\n");
+  #endif
 }
 

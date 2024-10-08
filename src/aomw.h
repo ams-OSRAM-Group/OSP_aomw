@@ -23,7 +23,7 @@
 
 
 // Identifies lib version
-#define AOMW_VERSION "0.4.0"
+#define AOMW_VERSION "0.4.1"
 
 
 // Include the (headers of the) modules of this app

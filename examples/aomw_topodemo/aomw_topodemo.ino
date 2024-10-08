@@ -36,14 +36,18 @@ The demo runs on the OSP32 board, no demo board needs to be attached, but
 the output shown below is when the SAIDbasic board is connected.
 In Arduino select board "ESP32S3 Dev Module".
 
+BEHAVIOR
+A running LED, first blue then white, first from left to right, then
+from right to left.
+
 OUTPUT
 Welcome to aomw_topodemo.ino
-version: result 0.1.7 spi 0.2.4 osp 0.1.16 mw 0.0.7
+version: result 0.4.1 spi 0.5.1 osp 0.4.1 mw 0.4.0
 spi: init
 osp: init
 mw: init
 
-Starting animation on 18 RGBs
+Starting animation on 17 RGBs
 Brightness 64/1024
 */
 

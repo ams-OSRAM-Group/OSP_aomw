@@ -1,4 +1,4 @@
-// aomw_iox.cpp - driver for NXP PCA6408ABSHP IO expander connected to a SAID, assuming 4 LEDs and 4 buttons are connected
+// aomw_iox.cpp - driver for NXP PCA6408ABSHP I/O-expander connected to a SAID, assuming 4 LEDs and 4 buttons are connected
 /*****************************************************************************
  * Copyright 2024 by ams OSRAM AG                                            *
  * All rights are reserved.                                                  *
@@ -24,11 +24,11 @@
 
 
 // ==========================================================================
-// This driver assumes an NXP PCA6408ABSHP IO expander is connected to a SAID 
+// This driver assumes an NXP PCA6408ABSHP I/O-expander is connected to a SAID 
 // I2C bus. Furthermore, it assumes ports 1, 3, 5, and 7 have a button 
 // connected to it. The buttons are low active (0 when pushed). It also 
-// assumes that ports 2, 4, 6, and 8 have a signaling LED connected to it.
-// The signaling LEDs are high active (1 switches them on).
+// assumes that ports 2, 4, 6, and 8 have a indicator LED connected to it.
+// The indicator LEDs are high active (1 switches them on).
 //
 // This driver is not multi-instance. It can only control an IOX with I2C
 // address AOMW_IOX_DADDR7, and only one I2C bus - that is one SAID.
@@ -39,29 +39,29 @@
 static uint16_t aomw_iox_saidaddr;   
 
 
-// Registers of the IO Expander
+// Registers of the I/O-expander
 #define AOMW_IOX_REGINVAL       0x00 // Input port register reflects the incoming logic levels of all pins (read)
 #define AOMW_IOX_REGOUTVAL      0x01 // The Output port register contains the outgoing logic levels of the pins defined as outputs (read/write)
 #define AOMW_IOX_REGINPINV      0x02 // The Polarity inversion register allows polarity inversion of pins defined as inputs (read/write)
 #define AOMW_IOX_REGCFGINP      0x03 // The Configuration register configures the direction of the I/O pins. If a bit is 1, the pin is input (read/write)
 
 
-// === Signaling LED ========================================================
+// === Indicator LED ========================================================
 
 
-// Current state of the signaling LEDs (shadow of the IOX register)
+// Current state of the indicator LEDs (shadow of the IOX register)
 static uint8_t  aomw_iox_led_states; 
 
 
 /*!
-    @brief  Turns on the signaling LEDs that have a bit set in `led`.
-    @param  led
+    @brief  Turns on the indicator LEDs that have a bit set in `led`.
+    @param  leds
             A bit mask, typically composed of AOMW_IOX_LEDxxx flags.
     @return aoresult_ok           if LEDs are set successfully
             other error code      if there is a (communications) error
-    @note   This module controls (LEDs and buttons on) one I/O expander;
+    @note   This module controls (LEDs and buttons on) one I/O-expander;
             which one must first be established with aomw_iox_init().
-    @note   The IO expander is controlled via OSP, hence the possibility 
+    @note   The I/O-expander is controlled via OSP, hence the possibility 
             for transmission errors.
     @note   The LEDs that have a 0 bit in `led` are not changed.
 */
@@ -72,14 +72,14 @@ aoresult_t aomw_iox_led_on( uint8_t leds ) {
 
 
 /*!
-    @brief  Turns off the signaling LEDs that have a bit set in `led`.
-    @param  led
+    @brief  Turns off the indicator LEDs that have a bit set in `led`.
+    @param  leds
             A bit mask, typically composed of AOMW_IOX_LEDxxx flags.
     @return aoresult_ok           if LEDs are set successfully
             other error code      if there is a (communications) error
-    @note   This module controls (LEDs and buttons on) one I/O expander;
+    @note   This module controls (LEDs and buttons on) one I/O-expander;
             which one must first be established with aomw_iox_init().
-    @note   The IO expander is controlled via OSP, hence the possibility 
+    @note   The I/O-expander is controlled via OSP, hence the possibility 
             for transmission errors.
     @note   The LEDs that have a 0 bit in `led` are not changed.
 */
@@ -90,17 +90,17 @@ aoresult_t aomw_iox_led_off( uint8_t leds ) {
 
 
 /*!
-    @brief  The bits set in `leds` indicate which signaling LEDs to turn on, 
+    @brief  The bits set in `leds` indicate which indicator LEDs to turn on, 
             the clear bits, which to turn off.
-    @param  led
+    @param  leds
             A bit mask, typically composed of AOMW_IOX_LEDxxx flags.
     @return aoresult_ok           if LEDs are set successfully
             other error code      if there is a (communications) error
-    @note   This module controls (LEDs and buttons on) one I/O expander;
+    @note   This module controls (LEDs and buttons on) one I/O-expander;
             which one must first be established with aomw_iox_init().
-    @note   The IO expander is controlled via OSP, hence the possibility 
+    @note   The I/O-expander is controlled via OSP, hence the possibility 
             for transmission errors.
-    @note   All signaling LEDs are controlled.
+    @note   All indicator LEDs are controlled.
 */
 aoresult_t aomw_iox_led_set( uint8_t leds ) {
   aomw_iox_led_states = leds;
@@ -124,9 +124,9 @@ static uint8_t  aomw_iox_but_curstates;
             buttons are respectively went up/down.
     @return aoresult_ok           if button status read was successful
             other error code      if there is a (communications) error
-    @note   This module controls (LEDs and buttons on) one I/O expander;
+    @note   This module controls (LEDs and buttons on) one I/O-expander;
             which one, must first be established once, with aomw_iox_init().
-    @note   The IO expander is controlled via OSP, hence the possibility 
+    @note   The I/O-expander is controlled via OSP, hence the possibility 
             for transmission errors.
     @note   Call aoui32_but_scan() frequently, but also with delays 
             in between (1ms) to mitigate contact bounce of the buttons.
@@ -209,7 +209,7 @@ uint8_t aomw_iox_but_isup( uint8_t buts ) {
 
 
 /*!
-    @brief  Tests if an IO expander (IOX) is connected to the I2C bus of  
+    @brief  Tests if an I/O-expander (IOX) is connected to the I2C bus of  
             OSP node (SAID) with address `addr`.
     @param  addr
             The OSP address of a SAID with an I2C bridge.
@@ -217,9 +217,9 @@ uint8_t aomw_iox_but_isup( uint8_t buts ) {
             aoresult_dev_noi2cdev    if IOX is not found on the I2C bus of addr
             aoresult_dev_noi2cbridge if addr has no I2C bridge
             other                    OSP (communication) errors
-    @note   The IO expander is controlled via OSP, hence the possibility 
+    @note   The I/O-expander is controlled via OSP, hence the possibility 
             for transmission errors.
-    @note   This routine assumes the IO expander has I2C device address
+    @note   This routine assumes the I/O-expander has I2C device address
             AOMW_IOX_DADDR7.
     @note   Sends I2C telegrams, so OSP must be initialized, eg via a call
             to aoosp_exec_resetinit), and the I2C bus must be powered, eg via 
@@ -243,18 +243,18 @@ aoresult_t aomw_iox_present(uint16_t addr ) {
 
 
 /*!
-    @brief  Associates this software driver to the IO expander (IOX) 
+    @brief  Associates this software driver to the I/O-expander (IOX) 
             connected to the I2C bus of OSP node (SAID) with address `addr`.
     @param  addr
-            The OSP address of a SAID with an I2C bridge with an IO expander.
+            The OSP address of a SAID with an I2C bridge with an I/O-expander.
     @return aoresult_ok           if LEDs are set successfully
             other error code      if there is a (communications) error
-    @note   The IO expander is controlled via OSP, hence the possibility 
+    @note   The I/O-expander is controlled via OSP, hence the possibility 
             for transmission errors.
-    @note   This routine assumes the IO expander has I2C device address
+    @note   This routine assumes the I/O-expander has I2C device address
             AOMW_IOX_DADDR7.
     @note   It is allowed to call this function again, to associate this
-            driver with a different IO expander.
+            driver with a different I/O-expander.
     @note   Sends I2C telegrams, so OSP must be initialized, eg via a call
             to aoosp_exec_resetinit), and the I2C bus must be powered, eg via 
             a call to aoosp_exec_i2cpower(). Function aomw_topo_build()
@@ -270,7 +270,7 @@ aoresult_t aomw_iox_init(uint16_t addr) {
   // result= aoosp_send_seti2ccfg(addr, AOOSP_I2CCFG_FLAGS_DEFAULT, AOOSP_I2CCFG_SPEED_DEFAULT);
   // if( result!=aoresult_ok ) return result;
 
-  // Switch signaling LEDs off
+  // Switch indicator LEDs off
   result= aomw_iox_led_set(AOMW_IOX_LEDNONE);
   if( result!=aoresult_ok ) return result;
 

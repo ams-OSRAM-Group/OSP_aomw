@@ -5,7 +5,7 @@ is one of the **aolibs**; short for Arduino OSP libraries from ams-OSRAM.
 This suite implements support for chips that use the Open System Protocol, 
 like the AS1163 ("SAID") or the OSIRE E3731i ("RGBi").
 The landing page for the _aolibs_ is on 
-[GitHub](https://github.com/ams-OSRAM-Group/OSP_aotop).
+[GitHub](https://github.com/ams-OSRAM/OSP_aotop).
 
 
 ## Introduction
@@ -50,7 +50,7 @@ File > Examples > OSP Middleware aomw > ...
 
 -  **aomw_flag** ([source](examples/aomw_flag))  
    This demo builds a topology map of all nodes of the OSP chain. Next, it 
-   uses this topo map to paint flags spread out over an entire OSP chain.
+   uses this topo map to paint country flags spread out over an entire OSP chain.
 
 -  **aomw_iox** ([source](examples/aomw_iox))  
    This demo initializes an OSP chain, powers the I2C bridge in a SAID and 
@@ -74,9 +74,9 @@ File > Examples > OSP Middleware aomw > ...
 
 ## Module architecture
 
-This library contains several modules, see figure below (arrows indicate #include).
+This library contains several modules, see figure below (arrows indicate `#include`).
 
-![Modules](extras/modules.drawio.png)
+![Modules](extras/aomw-modules.drawio.png)
 
 - **aomw_topo** (`aomw_topo.cpp` and `aomw_topo.h`) builds and then 
   provides the so-called "topology map", a data structure describing the 
@@ -116,9 +116,9 @@ This library contains several modules, see figure below (arrows indicate #includ
   detailed explanation is in [aomw_tscript.cpp](examples/aomw_tscript.cpp).
   
   This module also contains some animation scripts. The application 
-  [eepromflasher](https://github.com/ams-OSRAM-Group/OSP_aotop/tree/main/examples/eepromflasher)
+  [eepromflasher](https://github.com/ams-OSRAM/OSP_aotop/tree/main/examples/eepromflasher)
   allows writing scripts to EEPROMs. The app 
-  [aoapps_aniscript](https://github.com/ams-OSRAM-Group/OSP_aoapps/tree/main/src/aoapps_aniscript)
+  [aoapps_aniscript](https://github.com/ams-OSRAM/OSP_aoapps/tree/main/src/aoapps_aniscript)
   reads those EEPROMs and play the animation.
 
 - **aomw_iox** (`aomw_iox.cpp` and `aomw_iox.h`) is a driver for I2C based 
@@ -127,7 +127,7 @@ This library contains several modules, see figure below (arrows indicate #includ
   I/O expander on the SAIDbasic board: 4 of its GPIOs are attached to a 
   signaling LED, and 4 of its GPIOs are attached to a button.
 
-  The app [aoapps_swflag](https://github.com/ams-OSRAM-Group/OSP_aoapps/tree/main/src/aoapps_swflag)
+  The app [aoapps_swflag](https://github.com/ams-OSRAM/OSP_aoapps/tree/main/src/aoapps_swflag)
   uses the I/O expander to select one in four flags.
   
 - **aomw_flag** (`aomw_flag.cpp` and `aomw_flag.h`) is a module that can map
@@ -135,7 +135,7 @@ This library contains several modules, see figure below (arrows indicate #includ
   The flags are available by name and by index.
 
   This module uses `aomw_topo` to render the flags.
-  The app [aoapps_swflag](https://github.com/ams-OSRAM-Group/OSP_aoapps/tree/main/src/aoapps_swflag)
+  The app [aoapps_swflag](https://github.com/ams-OSRAM/OSP_aoapps/tree/main/src/aoapps_swflag)
   uses this module render a flag.
 
    
@@ -384,7 +384,21 @@ it is "query-able".
 
 ## Version history _aomw_
 
-- **2024 sep 5, 0.4.0**
+- **2024 October 8, 0.4.1**
+  - Fixed parsing problems Doxygen.
+  - Prefixed `modules.drawio.png` with library short name.
+  - Updated topology and tiny script documentation (in cpp files).
+  - Fixed doc on "under voltage".
+  - Moved domain from `github.com/ams-OSRAM-Group` to `github.com/ams-OSRAM`.
+  - Term cleanup ("indicator LEDs" and "I/O-expander").
+  - Fixed bug in `walk` animation in `aomw_tscript.ino`.
+  - Fixed HARDWARE description in `aomw_iox.ino`.
+  - Fixed ADDR bug and added printf with used device address in `aomw_eeprom.ino`.
+  - `aomw_flag.ino` now also shows how to use iterator.
+  - Update to `readme.md`.
+  - Added BEHAVIOR section to explanation in examples.
+
+- **2024 September 5, 0.4.0**
   - API section in readme now shows parameter names.
   - Adapted to `aoosp_exec_resetinit` not needing `last` and `loop`.
   - Introduced "topo brightness range".
@@ -401,7 +415,7 @@ it is "query-able".
   - Renamed dir `extra` to `extras`.
   - `license.txt`, `examples\xxx.ino` line endings changed from LF to CR+LF.
 
-- **2024 Jul 02, 0.3.0**  
+- **2024 July 02, 0.3.0**  
   - Initial release candidate.
 
 

@@ -37,8 +37,17 @@ The demo runs on the OSP32 board, no demo board needs to be attached, but
 for better animation script rendering connect eg the SAIDbasic board.
 In Arduino select board "ESP32S3 Dev Module".
 
+BEHAVIOR
+Depends on the animation script
+- blink: five LEDs on the SAIDbasic blink yellow and blue.
+- walk: block move left to right, in the middle its half highlights
+
 OUTPUT
-Nothing relevant, but the RGBs show an animation.
+Welcome to aomw_tscript.ino
+version: result 0.4.1 spi 0.5.1 osp 0.4.1 mw 0.4.0
+spi: init
+osp: init
+mw: init
 */
 
 
@@ -62,6 +71,7 @@ static const uint16_t walk[] = {
   0034000, 0155200,          // -----r--
   0055000, 0166200,          // ------r-
   0066000, 0177200,          // -------r
+  0077000,                   // --------
   0070000,                   // end
 };
 

@@ -1,4 +1,4 @@
-// aomw_iox.h - driver for NXP PCA6408ABSHP IO expander connected to a SAID, assuming 4 LEDs and 4 buttons are connected
+// aomw_iox.h - driver for NXP PCA6408ABSHP I/O-expander connected to a SAID, assuming 4 LEDs and 4 buttons are connected
 /*****************************************************************************
  * Copyright 2024 by ams OSRAM AG                                            *
  * All rights are reserved.                                                  *
@@ -26,10 +26,10 @@
 #include <aoresult.h>   // aoresult_t
 
 
-// === Signaling LED ========================================================
+// === Indicator LED ========================================================
 
 
-// Masks for aomw_iox_led_on/off/set to tell which LED to switch (can be or'ed)
+// Masks for aomw_iox_led_on/off/set to tell which indicator LED to switch (can be or'ed)
 #define AOMW_IOX_LED0    0x02
 #define AOMW_IOX_LED1    0x08
 #define AOMW_IOX_LED2    0x20
@@ -39,11 +39,11 @@
 #define AOMW_IOX_LEDNONE 0x00
 
 
-// Turns on the signaling LEDs that have a bit set in `led`.
+// Turns on the indicator LEDs that have a bit set in `led`.
 aoresult_t aomw_iox_led_on( uint8_t leds );
-// Turns off the signaling LEDs that have a bit set in `led`.
+// Turns off the indicator LEDs that have a bit set in `led`.
 aoresult_t aomw_iox_led_off( uint8_t leds );
-// The bits set in `leds` indicate which signaling LEDs to turn on, the clear bits, which to turn off.
+// The bits set in `leds` indicate which indicator LEDs to turn on, the clear bits, which to turn off.
 aoresult_t aomw_iox_led_set( uint8_t leds );
 
 
@@ -73,13 +73,13 @@ uint8_t aomw_iox_but_isup( uint8_t buts );
 // === main =================================================================
 
 
-// I2C address of the IO Expander
+// I2C address of the I/O-expander
 #define AOMW_IOX_DADDR7         0x20
 
 
-// Tests if an IO expander (IOX) is connected to the I2C bus of OSP node (SAID) with address `addr`.
+// Tests if an I/O-expander (IOX) is connected to the I2C bus of OSP node (SAID) with address `addr`.
 aoresult_t aomw_iox_present(uint16_t addr );
-// Associates this software driver to the IO expander (IOX) connected to the I2C bus of OSP node (SAID) with address `addr`.
+// Associates this software driver to the I/O-expander (IOX) connected to the I2C bus of OSP node (SAID) with address `addr`.
 aoresult_t aomw_iox_init(uint16_t addr);
 
 

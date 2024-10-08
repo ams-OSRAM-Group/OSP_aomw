@@ -32,13 +32,22 @@ plays a light show on the connected signaling LEDs, which can be
 interrupted by pressing a button connected to the IOX.
 
 HARDWARE
-The demo runs on the OSP32 board, no demo board needs to be attached, but 
-for better flag rendering connect eg the SAIDbasic board.
+The demo needs the SAIDbasic to beconnected to the OSP32 board.
 In Arduino select board "ESP32S3 Dev Module".
 
+BEHAVIOR
+It shows a running LED using the four signaling LEDs on the SAID basic board
+(associated with the four buttons). When a button is pressed, the running 
+stops, all signaling LEDs swithc on except the one associated with the pressed
+button.
+
 OUTPUT
-Nothing relevant, but the signaling LEDs on the SAID basic board are animated
-and each of the four buttons can be pressed.
+Welcome to aomw_iox.ino
+version: result 0.4.1 spi 0.5.1 osp 0.4.1 mw 0.4.0
+spi: init
+osp: init
+mw: init
+demo: init
 */
 
 
